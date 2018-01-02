@@ -1,15 +1,12 @@
 package com.lytech.xvjialing.schoolmessagetool.ui;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.lytech.xvjialing.common.bean.Result;
 import com.lytech.xvjialing.common.bean.Student;
@@ -26,56 +23,44 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class LoginActivity extends AppCompatActivity {
+public class RegisterActivity extends AppCompatActivity {
 
-    private static final String TAG = LoginActivity.class.getSimpleName();
+    private static final String TAG = RegisterActivity.class.getSimpleName();
     @BindView(R.id.tiet_username)
     TextInputEditText tietUsername;
     @BindView(R.id.tiet_password)
     TextInputEditText tietPassword;
-    @BindView(R.id.sp_role)
-    Spinner spRole;
-    @BindView(R.id.btn_login)
-    Button btnLogin;
-    @BindView(R.id.tv_register)
-    TextView tvRegister;
+    @BindView(R.id.tiet_checkpassword)
+    TextInputEditText tietCheckpassword;
+    @BindView(R.id.spinner)
+    Spinner spinner;
+    @BindView(R.id.button)
+    Button button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_register);
         ButterKnife.bind(this);
-
     }
 
-    @OnClick({R.id.btn_login, R.id.tv_register})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.btn_login:
-                login();
-                break;
-            case R.id.tv_register:
-                register();
-                break;
-        }
+    @OnClick(R.id.button)
+    public void onViewClicked() {
+        register();
     }
 
     private void register() {
-        startActivity(new Intent(this,RegisterActivity.class));
-    }
-
-    private void login() {
         if (getRole()==UserType.USER_TYPE_STUDENT){
-            studentLogin();
+            student_register();
         }else {
-            teacherLogin();
+            teacher_register();
         }
     }
 
-    private void teacherLogin() {
+    private void teacher_register() {
         NetUtils.getInstance()
                 .getNetService()
-                .teacher_login(getUserName(),getPassword())
+                .teacher_register(getUsername(),getPassword(),UserType.USER_TYPE_TEACHER)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<Result<Teacher>>() {
@@ -86,7 +71,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.e(TAG, "onError: "+e);
+
                     }
 
                     @Override
@@ -94,19 +79,17 @@ public class LoginActivity extends AppCompatActivity {
                         if (!teacherResult.isStatus()){
                             showMsg(teacherResult.getMessage());
                         }else {
-                            Log.d(TAG, "onNext: "+teacherResult.toString());
-                            gotoTeacherMainAc();
+                            showMsg("注册成功");
+                            finish();
                         }
-
                     }
                 });
     }
 
-
-    private void studentLogin() {
+    private void student_register() {
         NetUtils.getInstance()
                 .getNetService()
-                .student_login(getUserName(),getPassword())
+                .student_register(getUsername(),getPassword(),UserType.USER_TYPE_STUDENT)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<Result<Student>>() {
@@ -117,7 +100,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(Throwable e) {
-
+                        Log.d(TAG, "onError: "+e);
                     }
 
                     @Override
@@ -125,41 +108,36 @@ public class LoginActivity extends AppCompatActivity {
                         if (!studentResult.isStatus()){
                             showMsg(studentResult.getMessage());
                         }else {
-                            Log.d(TAG, "onNext: "+studentResult.toString());
-                            gotoStudentMainAc();
+                            showMsg("注册成功");
+                            finish();
                         }
                     }
                 });
     }
 
-    private void showMsg(String message) {
-        ToastUtils.showMessage(message,this);
+
+    private void showMsg(String msg){
+        ToastUtils.showMessage(msg,this);
     }
 
-    private void gotoStudentMainAc(){
-        startActivity(new Intent(this,StudentMainActivity.class));
-    }
-
-    private void gotoTeacherMainAc(){
-        startActivity(new Intent(this,TeacherMainActivity.class));
-    }
-
-    public String getUserName(){
+    private String getUsername(){
         return tietUsername.getText().toString();
     }
 
-    public String getPassword(){
+    private String getPassword(){
         return tietPassword.getText().toString();
     }
 
-    public int getRole(){
-        String rolestr=spRole.getSelectedItem().toString();
-//        Log.d(TAG, "getRole: "+rolestr);
-        if (TextUtils.equals("学生",rolestr)){
+    private String getCheckPassword(){
+        return tietCheckpassword.getText().toString();
+    }
+
+    private int getRole(){
+        String roleStr=spinner.getSelectedItem().toString();
+        if (TextUtils.equals("学生",roleStr)){
             return UserType.USER_TYPE_STUDENT;
-        }else{
+        }else {
             return UserType.USER_TYPE_TEACHER;
         }
     }
-
 }
