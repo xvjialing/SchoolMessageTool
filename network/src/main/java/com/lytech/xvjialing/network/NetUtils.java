@@ -27,7 +27,7 @@ public class NetUtils {
         retrofit=new Retrofit.Builder()
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
-                .baseUrl(UrlUtils.localUrl)
+                .baseUrl(UrlUtils.baseUrl2)
                 .build();
         netService=retrofit.create(NetService.class);
         return netService;

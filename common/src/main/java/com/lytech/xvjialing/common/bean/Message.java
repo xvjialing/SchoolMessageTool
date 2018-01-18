@@ -11,31 +11,11 @@ public class Message implements Serializable{
 
     private Integer id;
 
-    /**
-     * 小米推送的消息id
-     */
-    private String messageId;
-
-    /**
-     * 小米推送的消息追踪id
-     */
-    private String trace_id;
-
-    /**
-     * 小米推送的消息失败的errorCode
-     */
-    private String errorCode;
-
-    /**
-     * 小米推送的消息失败的原因
-     */
-    private String reason;
-
-    private Long timeStamp;
+    private Long time;
 
     private String message;
 
-    private Teacher publisher;
+    private Integer teacher_id;
 
     private List<Student> studentList;
 
@@ -49,44 +29,13 @@ public class Message implements Serializable{
         this.id = id;
     }
 
-    public String getMessageId() {
-        return messageId;
+
+    public Long getTime() {
+        return time;
     }
 
-    public void setMessageId(String messageId) {
-        this.messageId = messageId;
-    }
-
-    public String getTrace_id() {
-        return trace_id;
-    }
-
-    public void setTrace_id(String trace_id) {
-        this.trace_id = trace_id;
-    }
-
-    public String getErrorCode() {
-        return errorCode;
-    }
-
-    public void setErrorCode(String errorCode) {
-        this.errorCode = errorCode;
-    }
-
-    public String getReason() {
-        return reason;
-    }
-
-    public void setReason(String reason) {
-        this.reason = reason;
-    }
-
-    public Long getTimeStamp() {
-        return timeStamp;
-    }
-
-    public void setTimeStamp(Long timeStamp) {
-        this.timeStamp = timeStamp;
+    public void setTime(Long time) {
+        this.time = time;
     }
 
     public String getMessage() {
@@ -97,12 +46,12 @@ public class Message implements Serializable{
         this.message = message;
     }
 
-    public Teacher getPublisher() {
-        return publisher;
+    public Integer getTeacher_id() {
+        return teacher_id;
     }
 
-    public void setPublisher(Teacher publisher) {
-        this.publisher = publisher;
+    public void setTeacher_id(Integer teacher_id) {
+        this.teacher_id = teacher_id;
     }
 
     public List<Student> getStudentList() {
@@ -119,5 +68,18 @@ public class Message implements Serializable{
 
     public void setRecieverRole(Integer recieverRole) {
         this.recieverRole = recieverRole;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Message{" +
+                "id=" + id +
+                ", time=" + time +
+                ", message='" + message + '\'' +
+                ", teacher_id=" + teacher_id +
+                ", studentList=" + studentList +
+                ", recieverRole=" + recieverRole +
+                '}';
     }
 }

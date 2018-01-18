@@ -14,6 +14,8 @@ public class Student implements Serializable{
 
     private List<Message> messageList;
 
+    private int schoolClassId;
+
     public Integer getId() {
         return id;
     }
@@ -25,6 +27,7 @@ public class Student implements Serializable{
     public User getUser() {
         return user;
     }
+
 
     public void setUser(User user) {
         this.user = user;
@@ -38,12 +41,21 @@ public class Student implements Serializable{
         this.messageList = messageList;
     }
 
+    public int getSchoolClassId() {
+        return schoolClassId;
+    }
+
+    public void setSchoolClassId(int schoolClassId) {
+        this.schoolClassId = schoolClassId;
+    }
+
     @Override
     public String toString() {
         return "Student{" +
                 "id=" + id +
                 ", user=" + user +
                 ", messageList=" + messageList +
+                ", schoolClassId=" + schoolClassId +
                 '}';
     }
 }

@@ -1,12 +1,10 @@
 package com.lytech.xvjialing.common.bean;
 
-import java.io.Serializable;
-
 /**
- * Created by xvjialing on 2018/1/2.
+ * Created by xvjialing on 2018/1/9.
  */
 
-public class User implements Serializable{
+public class PostStudent {
     private Integer id;
 
     private String username;
@@ -16,6 +14,8 @@ public class User implements Serializable{
     private String name;
 
     private Integer role;
+
+    private SchoolClass schoolClass;
 
     public Integer getId() {
         return id;
@@ -49,6 +49,14 @@ public class User implements Serializable{
         this.role = role;
     }
 
+    public SchoolClass getSchoolClass() {
+        return schoolClass;
+    }
+
+    public void setSchoolClass(SchoolClass schoolClass) {
+        this.schoolClass = schoolClass;
+    }
+
     public String getName() {
         return name;
     }
@@ -59,12 +67,13 @@ public class User implements Serializable{
 
     @Override
     public String toString() {
-        return "User{" +
+        return "PostStudent{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", name='" + name + '\'' +
                 ", role=" + role +
+                ", schoolClass=" + schoolClass +
                 '}';
     }
 }

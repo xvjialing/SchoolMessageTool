@@ -5,16 +5,14 @@ import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
 import com.lytech.xvjialing.common.bean.Result;
-import com.lytech.xvjialing.common.bean.Student;
 import com.lytech.xvjialing.common.bean.Teacher;
-import com.lytech.xvjialing.common.conf.UserType;
+import com.lytech.xvjialing.common.utils.SPDataUtils;
 import com.lytech.xvjialing.common.utils.ToastUtils;
 import com.lytech.xvjialing.network.NetUtils;
 import com.lytech.xvjialing.schoolmessagetool.R;
@@ -26,15 +24,14 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class LoginActivity extends AppCompatActivity {
+import static com.lytech.xvjialing.schoolmessagetool.ui.StartActivity.startActivityWeakReference;
 
-    private static final String TAG = LoginActivity.class.getSimpleName();
+public class TeacherLoginActivity extends AppCompatActivity {
+
     @BindView(R.id.tiet_username)
     TextInputEditText tietUsername;
     @BindView(R.id.tiet_password)
     TextInputEditText tietPassword;
-    @BindView(R.id.sp_role)
-    Spinner spRole;
     @BindView(R.id.btn_login)
     Button btnLogin;
     @BindView(R.id.tv_register)
@@ -43,7 +40,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_teacher_login);
         ButterKnife.bind(this);
 
     }
@@ -55,24 +52,20 @@ public class LoginActivity extends AppCompatActivity {
                 login();
                 break;
             case R.id.tv_register:
-                register();
+                startActivity(new Intent(this,TeacherRegisterActivity.class));
                 break;
         }
     }
 
-    private void register() {
-        startActivity(new Intent(this,RegisterActivity.class));
-    }
-
     private void login() {
-        if (getRole()==UserType.USER_TYPE_STUDENT){
-            studentLogin();
-        }else {
-            teacherLogin();
+        if (TextUtils.isEmpty(getUserName())){
+            showMsg("用户名为空");
+            return;
         }
-    }
-
-    private void teacherLogin() {
+        if (TextUtils.isEmpty(getPassword())){
+            showMsg("密码为空");
+            return;
+        }
         NetUtils.getInstance()
                 .getNetService()
                 .teacher_login(getUserName(),getPassword())
@@ -86,58 +79,30 @@ public class LoginActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.e(TAG, "onError: "+e);
+
                     }
 
                     @Override
                     public void onNext(Result<Teacher> teacherResult) {
-                        if (!teacherResult.isStatus()){
-                            showMsg(teacherResult.getMessage());
-                        }else {
-                            Log.d(TAG, "onNext: "+teacherResult.toString());
+                        if (teacherResult.isStatus()){
+                            saveTeacher(teacherResult.getData());
+                            showMsg("登陆成功");
+                            startActivityWeakReference.get().finish();
+                            finish();
                             gotoTeacherMainAc();
+                        }else {
+                            showMsg(teacherResult.getMessage());
                         }
-
                     }
                 });
     }
 
-
-    private void studentLogin() {
-        NetUtils.getInstance()
-                .getNetService()
-                .student_login(getUserName(),getPassword())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Result<Student>>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(Result<Student> studentResult) {
-                        if (!studentResult.isStatus()){
-                            showMsg(studentResult.getMessage());
-                        }else {
-                            Log.d(TAG, "onNext: "+studentResult.toString());
-                            gotoStudentMainAc();
-                        }
-                    }
-                });
+    private void saveTeacher(Teacher teacher) {
+        SPDataUtils.setTeacher(this, JSON.toJSONString(teacher));
     }
 
     private void showMsg(String message) {
         ToastUtils.showMessage(message,this);
-    }
-
-    private void gotoStudentMainAc(){
-        startActivity(new Intent(this,StudentMainActivity.class));
     }
 
     private void gotoTeacherMainAc(){
@@ -151,15 +116,4 @@ public class LoginActivity extends AppCompatActivity {
     public String getPassword(){
         return tietPassword.getText().toString();
     }
-
-    public int getRole(){
-        String rolestr=spRole.getSelectedItem().toString();
-//        Log.d(TAG, "getRole: "+rolestr);
-        if (TextUtils.equals("学生",rolestr)){
-            return UserType.USER_TYPE_STUDENT;
-        }else{
-            return UserType.USER_TYPE_TEACHER;
-        }
-    }
-
 }
