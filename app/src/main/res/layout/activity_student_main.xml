@@ -44,6 +44,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/ll_second"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -68,6 +69,44 @@
 
 
         <TextView
+            android:id="@+id/tv_account"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawablePadding="10dp"
+            android:drawableTop="@drawable/ic_account"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="账户" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ll_second">
+
+
+
+
+        <TextView
+            android:id="@+id/tv_about"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawablePadding="10dp"
+            android:drawableTop="@drawable/ic_about"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="关于" />
+
+        <TextView
             android:id="@+id/tv_score"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -76,7 +115,10 @@
             android:drawableTop="@drawable/ic_score"
             android:gravity="center"
             android:padding="10dp"
-            android:text="成绩" />
+            android:text="成绩"
+            android:visibility="invisible"
+            android:clickable="false"/>
+
 
     </LinearLayout>
 

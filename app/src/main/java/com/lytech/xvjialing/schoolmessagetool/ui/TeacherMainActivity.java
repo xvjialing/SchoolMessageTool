@@ -18,6 +18,10 @@ public class TeacherMainActivity extends AppCompatActivity {
     CardView cvNotice;
     @BindView(R.id.cv_work)
     CardView cvWork;
+    @BindView(R.id.cv_account)
+    CardView cvAccount;
+    @BindView(R.id.cv_about)
+    CardView cvAbout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,14 +30,20 @@ public class TeacherMainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
     }
 
-    @OnClick({R.id.cv_notice, R.id.cv_work})
+    @OnClick({R.id.cv_notice, R.id.cv_work, R.id.cv_account, R.id.cv_about})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.cv_notice:
-                startActivity(new Intent(this,PublishNoticeActivity.class));
+                startActivity(new Intent(this, PublishNoticeActivity.class));
                 break;
             case R.id.cv_work:
-                startActivity(new Intent(this,PublishWorkActivity.class));
+                startActivity(new Intent(this, PublishWorkActivity.class));
+                break;
+            case R.id.cv_account:
+                startActivity(new Intent(this,TeacherAccountActivity.class));
+                break;
+            case R.id.cv_about:
+                startActivity(new Intent(this,AboutActivity.class));
                 break;
         }
     }

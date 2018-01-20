@@ -22,6 +22,10 @@ public class StudentMainActivity extends AppCompatActivity {
     TextView tvClassschedule;
     @BindView(R.id.tv_score)
     TextView tvScore;
+    @BindView(R.id.tv_account)
+    TextView tvAccount;
+    @BindView(R.id.tv_about)
+    TextView tvAbout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,21 +36,29 @@ public class StudentMainActivity extends AppCompatActivity {
 
     }
 
-    @OnClick({R.id.tv_notice, R.id.tv_work, R.id.tv_classschedule, R.id.tv_score})
+    @OnClick({R.id.tv_notice, R.id.tv_work, R.id.tv_classschedule, R.id.tv_score,R.id.tv_account, R.id.tv_about})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_notice:
-                startActivity(new Intent(this,NoticeActivity.class));
+                startActivity(new Intent(this, NoticeActivity.class));
                 break;
             case R.id.tv_work:
-                startActivity(new Intent(this,WorkActivity.class));
+                startActivity(new Intent(this, WorkActivity.class));
                 break;
             case R.id.tv_classschedule:
-                startActivity(new Intent(this,ClassScheduleActivity.class));
+                startActivity(new Intent(this, ClassScheduleActivity.class));
                 break;
             case R.id.tv_score:
-                startActivity(new Intent(this,ScoreActivity.class));
+                startActivity(new Intent(this, ScoreActivity.class));
+                break;
+            case R.id.tv_account:
+                startActivity(new Intent(this,StudentAccountActivity.class));
+                break;
+            case R.id.tv_about:
+                startActivity(new Intent(this,AboutActivity.class));
                 break;
         }
     }
+
+
 }
